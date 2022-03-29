@@ -1,5 +1,4 @@
 // ignore_for_file: deprecated_member_use
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -56,6 +55,17 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
 
+    Map lists = {
+      0: { 'icon':'academy', 'title':'講義データベース', 'nextPage': const classPage() },
+      1: { 'icon':'question', 'title':'質問コーナー', 'nextPage': const questionPage() },
+      2: { 'icon': 'recruitment', 'title':'メンバー募集', 'nextPage': const recruitmentPage() },
+      3: { 'icon': 'chat', 'title':'チャット', 'nextPage': const chatPage() },
+      4: { 'icon': 'book', 'title':'参考書交換所', 'nextPage': const bookPage() },
+      5: { 'icon': 'newspaper', 'title':'ニュース', 'nextPage': const newsPage() },
+      6: { 'icon': 'internet', 'title':'リンク集', 'nextPage': const linkPage() },
+      // 7: { 'icon': '歯車', 'title': '設定', 'nextPage': const settingsPage() }
+    };
+
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
@@ -79,134 +89,44 @@ class _MyHomePageState extends State<MyHomePage> {
           )
         ],
       ),
+      
       drawer: Drawer(
-        child: ListView(children: <Widget>[
-          const UserAccountsDrawerHeader(
-            accountName: Text("User Name"),
-            accountEmail: Text("User Email"),
-            currentAccountPicture: CircleAvatar(
-              backgroundColor: Colors.white,
-              backgroundImage: NetworkImage("https://pbs.twimg.com/profile_images/885510796691689473/rR9aWvBQ_400x400.jpg"),
-            ),
+          child: Column(
+            children: [
+              const UserAccountsDrawerHeader(
+                accountName: Text("User Name"),
+                accountEmail: Text("User Email"),
+                currentAccountPicture: CircleAvatar(
+                  backgroundColor: Colors.white,
+                  backgroundImage: NetworkImage("https://pbs.twimg.com/profile_images/885510796691689473/rR9aWvBQ_400x400.jpg"),
+                ),
+              ),
+              Expanded(
+                child: ListView.builder(
+                  itemBuilder: (BuildContext context, int index) {
+                    return ListTile(
+                      leading: SvgPicture.asset(
+                      'assets/svg/${lists[index]['icon']}.svg',
+                      semanticsLabel: lists[index]['icon'],
+                      width: 25,
+                      height: 25,
+                      color: Colors.grey[600],
+                    ),
+                      title: Text(lists[index]['title']),
+                      onTap: () {
+                        Navigator.of(context).pop();
+                        Navigator.push(context, MaterialPageRoute(
+                          builder: (context) => lists[index]['nextPage']
+                        ));
+                      },
+                    );
+                  },
+                  itemCount: lists.length,
+                ),
+              ),
+            ],
           ),
-          ListTile(
-            leading: SvgPicture.asset(
-              'assets/svg/academy.svg',
-              semanticsLabel: 'academy',
-              width: 25,
-              height: 25,
-              color: Colors.grey[600],
-            ),
-            title: const Text("講義データベース"),
-            onTap: () {
-              Navigator.of(context).pop();
-              Navigator.push(context, MaterialPageRoute(
-                builder: (context) =>  const classPage()
-              ));
-            },
-          ),
-          ListTile(
-            leading: SvgPicture.asset(
-              'assets/svg/question.svg',
-              semanticsLabel: 'question',
-              width: 25,
-              height: 25,
-              color: Colors.grey[600],
-            ),
-            title: const Text("質問コーナー"),
-            onTap: () {
-              Navigator.of(context).pop();
-              Navigator.push(context, MaterialPageRoute(
-                builder: (context) =>  const questionPage()
-              ));
-            },
-          ),
-          ListTile(
-            leading: SvgPicture.asset(
-              'assets/svg/recruitment.svg',
-              semanticsLabel: 'recruitment',
-              width: 25,
-              height: 25,
-              color: Colors.grey[600],
-            ),
-            title: const Text("メンバー募集"),
-            onTap: () {
-              Navigator.of(context).pop();
-              Navigator.push(context, MaterialPageRoute(
-                builder: (context) =>  const recruitmentPage()
-              ));
-            },
-          ),
-          ListTile(
-            leading: SvgPicture.asset(
-              'assets/svg/chat.svg',
-              semanticsLabel: 'chat',
-              width: 25,
-              height: 25,
-              color: Colors.grey[600],
-            ),
-            title: const Text("チャット"),
-            onTap: () {
-              Navigator.of(context).pop();
-              Navigator.push(context, MaterialPageRoute(
-                builder: (context) =>  const chatPage()
-              ));
-            },
-          ),
-          ListTile(
-            leading: SvgPicture.asset(
-              'assets/svg/book.svg',
-              semanticsLabel: 'book',
-              width: 25,
-              height: 25,
-              color: Colors.grey[600],
-            ),
-            title: const Text("参考書交換所"),
-            onTap: () {
-              Navigator.of(context).pop();
-              Navigator.push(context, MaterialPageRoute(
-                builder: (context) =>  const bookPage()
-              ));
-            },
-          ),
-          ListTile(
-            leading: SvgPicture.asset(
-              'assets/svg/newspaper.svg',
-              semanticsLabel: 'newspaper',
-              width: 25,
-              height: 25,
-              color: Colors.grey[600],
-            ),
-            title: const Text("ニュース"),
-            onTap: () {
-              Navigator.of(context).pop();
-              Navigator.push(context, MaterialPageRoute(
-                builder: (context) =>  const newsPage()
-              ));
-            },
-          ),
-          ListTile(
-            leading: SvgPicture.asset(
-              'assets/svg/internet.svg',
-              semanticsLabel: 'internet',
-              width: 25,
-              height: 25,
-              color: Colors.grey[600],
-            ),
-            title: const Text("リンク集"),
-            onTap: () {
-              Navigator.of(context).pop();
-              Navigator.push(context, MaterialPageRoute(
-                builder: (context) =>  const linkPage()
-              ));
-            },
-          ),
-          const ListTile(
-            leading: Icon(IconData(0xe57f, fontFamily: 'MaterialIcons')),
-            title: Text("設定"),
-          ),
-        ]),
-      ),
+        ),
       
       body: Center(
         child: Column(
