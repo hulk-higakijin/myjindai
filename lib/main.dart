@@ -4,6 +4,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:myjindai/alert_page.dart';
+import 'package:myjindai/book_page.dart';
+import 'package:myjindai/chat_page.dart';
+import 'package:myjindai/class_page.dart';
+import 'package:myjindai/link_page.dart';
+import 'package:myjindai/news_page.dart';
+import 'package:myjindai/question_page.dart';
+import 'package:myjindai/recruitment_page.dart';
 
 import 'firebase_options.dart';
 
@@ -23,6 +30,13 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        pageTransitionsTheme: const PageTransitionsTheme(
+          builders: <TargetPlatform, PageTransitionsBuilder>{
+            TargetPlatform.android: CupertinoPageTransitionsBuilder(), // iOS風
+            TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+            TargetPlatform.macOS: CupertinoPageTransitionsBuilder(),
+          },
+        ),
       ),
       home: const MyHomePage(title: 'MyApp'),
     );
@@ -38,12 +52,17 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
-    // var _city = '';
 
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
+        leading: IconButton(
+          onPressed: () => _scaffoldKey.currentState!.openDrawer(),
+          icon: const Icon(Icons.person_search),
+        ),
         title: Text(widget.title),
         backgroundColor: Colors.blue[900],
         actions: <Widget>[
@@ -71,73 +90,116 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
           ListTile(
-            leading: const Icon(IconData(0xf107, fontFamily: 'MaterialIcons')),
+            leading: SvgPicture.asset(
+              'assets/svg/academy.svg',
+              semanticsLabel: 'academy',
+              width: 25,
+              height: 25,
+              color: Colors.grey[600],
+            ),
             title: const Text("講義データベース"),
             onTap: () {
+              Navigator.of(context).pop();
               Navigator.push(context, MaterialPageRoute(
-                builder: (context) =>  const alertPage() //一時的にアラートページにしている
+                builder: (context) =>  const classPage()
               ));
             },
           ),
           ListTile(
             leading: SvgPicture.asset(
               'assets/svg/question.svg',
-              semanticsLabel: 'shopping',
+              semanticsLabel: 'question',
               width: 25,
               height: 25,
               color: Colors.grey[600],
             ),
             title: const Text("質問コーナー"),
+            onTap: () {
+              Navigator.of(context).pop();
+              Navigator.push(context, MaterialPageRoute(
+                builder: (context) =>  const questionPage()
+              ));
+            },
           ),
           ListTile(
             leading: SvgPicture.asset(
               'assets/svg/recruitment.svg',
-              semanticsLabel: 'shopping',
+              semanticsLabel: 'recruitment',
               width: 25,
               height: 25,
               color: Colors.grey[600],
             ),
             title: const Text("メンバー募集"),
+            onTap: () {
+              Navigator.of(context).pop();
+              Navigator.push(context, MaterialPageRoute(
+                builder: (context) =>  const recruitmentPage()
+              ));
+            },
           ),
           ListTile(
             leading: SvgPicture.asset(
               'assets/svg/chat.svg',
-              semanticsLabel: 'shopping',
+              semanticsLabel: 'chat',
               width: 25,
               height: 25,
               color: Colors.grey[600],
             ),
             title: const Text("チャット"),
+            onTap: () {
+              Navigator.of(context).pop();
+              Navigator.push(context, MaterialPageRoute(
+                builder: (context) =>  const chatPage()
+              ));
+            },
           ),
           ListTile(
             leading: SvgPicture.asset(
               'assets/svg/book.svg',
-              semanticsLabel: 'shopping',
+              semanticsLabel: 'book',
               width: 25,
               height: 25,
               color: Colors.grey[600],
             ),
             title: const Text("参考書交換所"),
+            onTap: () {
+              Navigator.of(context).pop();
+              Navigator.push(context, MaterialPageRoute(
+                builder: (context) =>  const bookPage()
+              ));
+            },
           ),
           ListTile(
             leading: SvgPicture.asset(
               'assets/svg/newspaper.svg',
-              semanticsLabel: 'shopping',
+              semanticsLabel: 'newspaper',
               width: 25,
               height: 25,
               color: Colors.grey[600],
             ),
             title: const Text("ニュース"),
+            onTap: () {
+              Navigator.of(context).pop();
+              Navigator.push(context, MaterialPageRoute(
+                builder: (context) =>  const newsPage()
+              ));
+            },
           ),
           ListTile(
             leading: SvgPicture.asset(
               'assets/svg/internet.svg',
-              semanticsLabel: 'shopping',
+              semanticsLabel: 'internet',
               width: 25,
               height: 25,
               color: Colors.grey[600],
             ),
             title: const Text("リンク集"),
+            onTap: () {
+              Navigator.of(context).pop();
+              Navigator.push(context, MaterialPageRoute(
+                builder: (context) =>  const linkPage()
+              ));
+            },
           ),
           const ListTile(
             leading: Icon(IconData(0xe57f, fontFamily: 'MaterialIcons')),
@@ -155,7 +217,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             SvgPicture.asset(
               'assets/svg/heart.svg',
-              semanticsLabel: 'shopping',
+              semanticsLabel: 'heart',
               width: 50,
               height: 50,
             ),
