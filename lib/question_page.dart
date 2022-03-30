@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:myjindai/components/Header.dart';
 
 class questionPage extends StatefulWidget {
   const questionPage({ Key? key }) : super(key: key);
@@ -12,24 +12,7 @@ class _questionPageState extends State<questionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          children: [
-            SvgPicture.asset(
-              'assets/svg/question.svg',
-              semanticsLabel: 'question',
-              width: 25,
-              height: 25,
-              color: Colors.white,
-            ),
-            Container(
-              padding: const EdgeInsets.all(8.0),
-              child: const Text('質問コーナー')
-            )
-          ],
-        ),
-        backgroundColor: Colors.blue[900],
-      ),
+      appBar: header('質問コーナー', 'question'),
     );
   }
 }
