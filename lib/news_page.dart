@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'components/header.dart';
+import 'package:myjindai/components/Header.dart';
 
 class newsPage extends StatefulWidget {
   const newsPage({ Key? key }) : super(key: key);
