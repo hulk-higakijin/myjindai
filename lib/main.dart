@@ -6,6 +6,7 @@ import 'package:myjindai/alert_page.dart';
 import 'package:myjindai/book_page.dart';
 import 'package:myjindai/chat_page.dart';
 import 'package:myjindai/class_page.dart';
+import 'package:myjindai/components/login.dart';
 import 'package:myjindai/link_page.dart';
 import 'package:myjindai/news_page.dart';
 import 'package:myjindai/question_page.dart';
@@ -33,7 +34,6 @@ class MyApp extends StatelessWidget {
           builders: <TargetPlatform, PageTransitionsBuilder>{
             TargetPlatform.android: CupertinoPageTransitionsBuilder(), // iOS風
             TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
-            TargetPlatform.macOS: CupertinoPageTransitionsBuilder(),
           },
         ),
       ),
@@ -50,47 +50,49 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  bool judge = false;
 
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
 
-    Map lists = {
-      0: { 'icon':'academy', 'title':'講義データベース', 'nextPage': const classPage() },
-      1: { 'icon':'question', 'title':'質問コーナー', 'nextPage': const questionPage() },
-      2: { 'icon': 'recruitment', 'title':'メンバー募集', 'nextPage': const recruitmentPage() },
-      3: { 'icon': 'chat', 'title':'チャット', 'nextPage': const chatPage() },
-      4: { 'icon': 'book', 'title':'参考書交換所', 'nextPage': const bookPage() },
-      5: { 'icon': 'newspaper', 'title':'ニュース', 'nextPage': const newsPage() },
-      6: { 'icon': 'internet', 'title':'リンク集', 'nextPage': const linkPage() },
-      // 7: { 'icon': '歯車', 'title': '設定', 'nextPage': const settingsPage() }
-    };
+    if (judge) { // ログイン判定を行う条件分岐
+      Map lists = {
+        0: { 'icon':'academy', 'title':'講義データベース', 'nextPage': const classPage() },
+        1: { 'icon':'question', 'title':'質問コーナー', 'nextPage': const questionPage() },
+        2: { 'icon': 'recruitment', 'title':'メンバー募集', 'nextPage': const recruitmentPage() },
+        3: { 'icon': 'chat', 'title':'チャット', 'nextPage': const chatPage() },
+        4: { 'icon': 'book', 'title':'参考書交換所', 'nextPage': const bookPage() },
+        5: { 'icon': 'newspaper', 'title':'ニュース', 'nextPage': const newsPage() },
+        6: { 'icon': 'internet', 'title':'リンク集', 'nextPage': const linkPage() },
+        // 7: { 'icon': '歯車', 'title': '設定', 'nextPage': const settingsPage() }
+      };
 
-    return Scaffold(
-      key: _scaffoldKey,
-      appBar: AppBar(
-        leading: IconButton(
-          onPressed: () => _scaffoldKey.currentState!.openDrawer(),
-          icon: const Icon(Icons.person_search),
-        ),
-        title: Text(widget.title),
-        backgroundColor: Colors.blue[900],
-        actions: <Widget>[
-          IconButton(
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(
-                builder: (context) =>  const alertPage()
-              ));
-            },
-            icon: const Icon(
-              IconData(0xeb48, fontFamily: 'MaterialIcons'),
-              color: Colors.white,
+      return Scaffold(
+        key: _scaffoldKey,
+        appBar: AppBar(
+          leading: IconButton(
+            onPressed: () => _scaffoldKey.currentState!.openDrawer(),
+            icon: const Icon(Icons.person_search),
+          ),
+          title: Text(widget.title),
+          backgroundColor: Colors.blue[900],
+          actions: <Widget>[
+            IconButton(
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(
+                  builder: (context) =>  const alertPage()
+                ));
+              },
+              icon: const Icon(
+                IconData(0xeb48, fontFamily: 'MaterialIcons'),
+                color: Colors.white,
+              )
             )
-          )
-        ],
-      ),
-      
-      drawer: Drawer(
+          ],
+        ),
+
+        drawer: Drawer(
           child: Column(
             children: [
               const UserAccountsDrawerHeader(
@@ -101,55 +103,59 @@ class _MyHomePageState extends State<MyHomePage> {
                   backgroundImage: NetworkImage("https://pbs.twimg.com/profile_images/885510796691689473/rR9aWvBQ_400x400.jpg"),
                 ),
               ),
-              Expanded(
-                child: ListView.builder(
-                  itemBuilder: (BuildContext context, int index) {
-                    return ListTile(
-                      leading: SvgPicture.asset(
-                      'assets/svg/${lists[index]['icon']}.svg',
-                      semanticsLabel: lists[index]['icon'],
-                      width: 25,
-                      height: 25,
-                      color: Colors.grey[600],
-                    ),
-                      title: Text(lists[index]['title']),
-                      onTap: () {
-                        Navigator.of(context).pop();
-                        Navigator.push(context, MaterialPageRoute(
-                          builder: (context) => lists[index]['nextPage']
-                        ));
-                      },
-                    );
-                  },
-                  itemCount: lists.length,
-                ),
+              ListView.builder(
+                padding: const EdgeInsets.all(10),
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemBuilder: (BuildContext context, int index) {
+                  return ListTile(
+                    leading: SvgPicture.asset(
+                    'assets/svg/${lists[index]['icon']}.svg',
+                    semanticsLabel: lists[index]['icon'],
+                    width: 25,
+                    height: 25,
+                    color: Colors.grey[600],
+                  ),
+                    title: Text(lists[index]['title']),
+                    onTap: () {
+                      Navigator.of(context).pop();
+                      Navigator.push(context, MaterialPageRoute(
+                        builder: (context) => lists[index]['nextPage']
+                      ));
+                    },
+                  );
+                },
+                itemCount: lists.length,
               ),
             ],
           ),
         ),
-      
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            SvgPicture.asset(
-              'assets/svg/heart.svg',
-              semanticsLabel: 'heart',
-              width: 50,
-              height: 50,
-            ),
-          ],
+
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              const Text(
+                'You have pushed the button this many times:',
+              ),
+              SvgPicture.asset(
+                'assets/svg/heart.svg',
+                semanticsLabel: 'heart',
+                width: 50,
+                height: 50,
+              ),
+            ],
+          ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: null,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-        backgroundColor: Colors.blue[900],
-      ),
-    );
+        floatingActionButton: FloatingActionButton(
+          onPressed: null,
+          tooltip: 'Increment',
+          child: const Icon(Icons.add),
+          backgroundColor: Colors.blue[900],
+        ),
+      );
+    } else {
+      return const login();
+    }
   }
 }
